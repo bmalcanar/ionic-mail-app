@@ -1,0 +1,32 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Inbox</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div id="container">
+    <ion-card button *ngFor="let mail of mails">
+      <ion-card-content>
+        <div id="mail-container">
+          <ion-icon *ngIf="mail.status === 'Unread'" class="mail-logo" name="mail"></ion-icon>
+          <ion-icon *ngIf="mail.status === 'Read'" class="mail-logo" name="mail-open"></ion-icon>
+          <p *ngIf="mail.status === 'Read'; else unread">
+            {{ mail.subject }} :
+            <br />
+            <ion-text>{{ mail.emailBody }}</ion-text>
+          </p>
+          <ng-template #unread>
+            <p>
+              <strong>{{ mail.subject }} :</strong><br />
+              <ion-text>{{ mail.emailBody }}</ion-text>
+            </p>
+          </ng-template>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

@@ -1,54 +1,61 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Platform } from '@ionic/angular';
+import { Platform, NavController, AlertController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
-  styleUrls: ['app.component.scss']
+  styleUrls: ['app.component.scss'],
 })
 export class AppComponent implements OnInit {
   public selectedIndex = 0;
   public appPages = [
     {
       title: 'Inbox',
-      url: '/folder/Inbox',
-      icon: 'mail'
+      url: '/pages/Inbox',
+      icon: 'mail',
     },
     {
       title: 'Outbox',
-      url: '/folder/Outbox',
-      icon: 'paper-plane'
+      url: '/pages/Outbox',
+      icon: 'paper-plane',
     },
     {
       title: 'Favorites',
-      url: '/folder/Favorites',
-      icon: 'heart'
+      url: '/pages/Favorites',
+      icon: 'heart',
     },
     {
       title: 'Archived',
-      url: '/folder/Archived',
-      icon: 'archive'
+      url: '/pages/Archived',
+      icon: 'archive',
     },
     {
       title: 'Trash',
-      url: '/folder/Trash',
-      icon: 'trash'
+      url: '/pages/Trash',
+      icon: 'trash',
     },
     {
       title: 'Spam',
-      url: '/folder/Spam',
-      icon: 'warning'
-    }
+      url: '/pages/Spam',
+      icon: 'warning',
+    },
+    {
+      title: 'Settings',
+      url: '/pages/Settings',
+      icon: 'cog',
+    },
   ];
-  public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
+  public labels = ['Family', 'Friends'];
 
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
-    private statusBar: StatusBar
+    private statusBar: StatusBar,
+    private navControl: NavController,
+    private alertController: AlertController
   ) {
     this.initializeApp();
   }
@@ -65,5 +72,29 @@ export class AppComponent implements OnInit {
     if (path !== undefined) {
       this.selectedIndex = this.appPages.findIndex(page => page.title.toLowerCase() === path.toLowerCase());
     }
+  }
+
+  public logout(): void {
+    this.presentAlertMultipleButtons();
+  }
+
+  private async presentAlertMultipleButtons() {
+    const alert = await this.alertController.create({
+      message: 'Are you sure you want to sign out?',
+      buttons: [
+        {
+          text: 'Yes',
+          handler: () => {
+            this.navControl.navigateRoot('/login');
+          },
+        },
+        {
+          text: 'No',
+          role: 'cancel',
+          cssClass: 'secondary',
+        },
+      ],
+    });
+    await alert.present();
   }
 }
